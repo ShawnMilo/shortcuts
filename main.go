@@ -29,10 +29,14 @@ func main() {
 			fPrintf(t)
 		} else if strings.HasPrefix(line, "fpl(") {
 			fPrintln(t)
+		} else if strings.HasPrefix(line, "hfunc") {
+			httpHandlerFunc(t)
 		} else if strings.HasPrefix(line, "lpl(") {
 			lPrintln(t)
 		} else if line == "gomain" {
 			goMain()
+		} else if line == "pymain" {
+			pyMain()
 		} else if line == "ubb" {
 			fmt.Println("#!/usr/bin/env bash")
 		} else if line == "ubp" {
@@ -83,4 +87,28 @@ func main() {
     fmt.Println("gopher")
 }
 `)
+}
+
+func pyMain() {
+	fmt.Println(`#!/usr/bin/env python
+"""
+You should probably write something here.
+"""
+
+from __future__ import unicode_literals
+
+func main():
+    """
+    Do the thing.
+    """
+    print "python"
+
+if __name__ == '__main__':
+    main()
+`)
+}
+
+func httpHandlerFunc(line string) {
+	name := strings.Split(line, " ")[1]
+	fmt.Printf("func %s(w http.ResponseWriter, r *http.Request){\n", name)
 }
