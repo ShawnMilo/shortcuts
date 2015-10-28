@@ -31,6 +31,8 @@ func main() {
 			fPrintln(t)
 		} else if strings.HasPrefix(line, "lpl(") {
 			lPrintln(t)
+		} else if line == "gomain" {
+			goMain()
 		} else {
 			fmt.Println(t)
 		}
@@ -62,4 +64,17 @@ func lPrintln(line string) {
 
 func fPrintln(line string) {
 	fmt.Println(strings.Replace(line, "fpl(", "fmt.Println(", 1))
+}
+
+func goMain() {
+	fmt.Println(`package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    fmt.Println("gopher")
+}
+`)
 }
