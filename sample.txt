@@ -19,3 +19,5 @@ pymain
 hfunc index {
     aoeu
 }
+
+wo:

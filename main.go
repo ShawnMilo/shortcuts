@@ -37,6 +37,8 @@ func main() {
 			goMain()
 		} else if line == "pymain" {
 			pyMain()
+		} else if line == "wo:" {
+			pyOpenWrite(t)
 		} else if line == "ubb" {
 			fmt.Println("#!/usr/bin/env bash")
 		} else if line == "ubp" {
@@ -97,7 +99,7 @@ You should probably write something here.
 
 from __future__ import unicode_literals
 
-func main():
+def main():
     """
     Do the thing.
     """
@@ -111,4 +113,18 @@ if __name__ == '__main__':
 func httpHandlerFunc(line string) {
 	name := strings.Split(line, " ")[1]
 	fmt.Printf("func %s(w http.ResponseWriter, r *http.Request){\n", name)
+}
+
+func pyOpenWrite(line string) {
+	l := len(line) - len(strings.TrimLeft(line, " "))
+	pad := strings.Repeat(" ", l)
+    lines := []string{
+        `with open("out.txt", "wb") as raw:`,
+        `    raw.write("{0}\n".format(msg))`,
+        }
+
+    for _, line = range lines {
+        fmt.Printf("%s%s\n", pad, line)
+    }
+
 }
