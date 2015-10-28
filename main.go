@@ -33,6 +33,10 @@ func main() {
 			lPrintln(t)
 		} else if line == "gomain" {
 			goMain()
+		} else if line == "ubb" {
+			fmt.Println("#!/usr/bin/env bash")
+		} else if line == "ubp" {
+			fmt.Println("#!/usr/bin/env python")
 		} else if strings.Contains(t, "(t.t)") {
 			fmt.Println(strings.Replace(t, "(t.t)", "(t *testing.T)", 1))
 		} else {
