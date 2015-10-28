@@ -33,6 +33,8 @@ func main() {
 			lPrintln(t)
 		} else if line == "gomain" {
 			goMain()
+		} else if strings.Contains(t, "(t.t)") {
+			fmt.Println(strings.Replace(t, "(t.t)", "(t *testing.T)", 1))
 		} else {
 			fmt.Println(t)
 		}
