@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-go build || exit
+go build -o /tmp/shortcuts || exit
 
-./shortcuts < sample.txt
+/tmp/shortcuts < sample.txt
