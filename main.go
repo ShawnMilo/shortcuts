@@ -23,6 +23,14 @@ func main() {
 		line := strings.TrimSpace(s.Text())
 		if strings.HasPrefix(line, "nnf:") {
 			printNotNilFatal(t)
+		} else if strings.HasPrefix(line, "lpf(") {
+			printLogPrintf(t)
+		} else if strings.HasPrefix(line, "fpf(") {
+			fPrintf(t)
+		} else if strings.HasPrefix(line, "fpl(") {
+			fPrintln(t)
+		} else if strings.HasPrefix(line, "lpl(") {
+			lPrintln(t)
 		} else {
 			fmt.Println(t)
 		}
@@ -38,4 +46,20 @@ func printNotNilFatal(line string) {
 	fmt.Printf("%sif err != nil{\n", pad)
 	fmt.Printf("%s%slog.Fatal(%q, err)\n", pad, pad, msg+": ")
 	fmt.Printf("%s}\n", pad)
+}
+
+func printLogPrintf(line string) {
+	fmt.Println(strings.Replace(line, "lpf(", "log.Printf(", 1))
+}
+
+func fPrintf(line string) {
+	fmt.Println(strings.Replace(line, "fpf(", "fmt.Printf(", 1))
+}
+
+func lPrintln(line string) {
+	fmt.Println(strings.Replace(line, "lpl(", "log.Println(", 1))
+}
+
+func fPrintln(line string) {
+	fmt.Println(strings.Replace(line, "fpl(", "fmt.Println(", 1))
 }
