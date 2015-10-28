@@ -118,13 +118,13 @@ func httpHandlerFunc(line string) {
 func pyOpenWrite(line string) {
 	l := len(line) - len(strings.TrimLeft(line, " "))
 	pad := strings.Repeat(" ", l)
-    lines := []string{
-        `with open("out.txt", "wb") as raw:`,
-        `    raw.write("{0}\n".format(msg))`,
-        }
+	lines := []string{
+		`with open("out.txt", "wb") as raw:`,
+		`    raw.write("{0}\n".format(msg))`,
+	}
 
-    for _, line = range lines {
-        fmt.Printf("%s%s\n", pad, line)
-    }
+	for _, line = range lines {
+		fmt.Printf("%s%s\n", pad, line)
+	}
 
 }
