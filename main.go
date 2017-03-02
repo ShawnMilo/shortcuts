@@ -21,7 +21,7 @@ func main() {
 	for s.Scan() {
 		t := s.Text()
 		line := strings.TrimSpace(s.Text())
-		if strings.HasPrefix(line, "nnf:") {
+		if strings.HasPrefix(line, "nnf") {
 			printNotNilFatal(t)
 		} else if strings.HasPrefix(line, "lpf(") {
 			printLogPrintf(t)
@@ -33,10 +33,20 @@ func main() {
 			httpHandlerFunc(t)
 		} else if strings.HasPrefix(line, "lpl(") {
 			lPrintln(t)
+		} else if strings.HasPrefix(line, "clog(") {
+			consoleLog(t)
+		} else if strings.HasPrefix(line, "clogVar") {
+			consoleLogVar(line)
 		} else if line == "gomain" {
 			goMain()
+		} else if line == "gows" {
+			goWebserver()
 		} else if line == "pymain" {
 			pyMain()
+		} else if line == "ul" {
+			unorderedList()
+		} else if line == "html5" {
+			html5()
 		} else if line == "wo:" {
 			pyOpenWrite(t)
 		} else if line == "ubb" {
@@ -74,6 +84,15 @@ func lPrintln(line string) {
 	fmt.Println(strings.Replace(line, "lpl(", "log.Println(", 1))
 }
 
+func consoleLog(line string) {
+	fmt.Println(strings.Replace(line, "clog(", "console.log(", 1))
+}
+
+func consoleLogVar(line string) {
+	name := strings.Split(line, " ")[1]
+	fmt.Printf("console.Log(\"%s: \" + %s);\n", name, name)
+}
+
 func fPrintln(line string) {
 	fmt.Println(strings.Replace(line, "fpl(", "fmt.Println(", 1))
 }
@@ -87,6 +106,25 @@ import (
 
 func main() {
     fmt.Println("gopher")
+}
+`)
+}
+
+func goWebserver() {
+	fmt.Println(`package main
+
+import (
+    "fmt"
+	"net/http"
+)
+
+func main() {
+    http.HandleFunc("/", index)
+	http.ListenAndServe(":8080", nil)
+}
+
+func index(w http.ResponseWriter, r *http.Request){
+	fmt.Fprintf(w, "hello")
 }
 `)
 }
@@ -110,6 +148,25 @@ if __name__ == '__main__':
 `)
 }
 
+func html5() {
+	fmt.Println(`<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>title</title>
+		<link rel="stylesheet" href="./css/style.css" type="text/css">
+		<meta name="viewport" content="width-device-width, initial-scale=1">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<div>
+			<p>content</p>
+		</div>
+	</body>
+</html>
+`)
+}
+
 func httpHandlerFunc(line string) {
 	name := strings.Split(line, " ")[1]
 	fmt.Printf("func %s(w http.ResponseWriter, r *http.Request){\n", name)
@@ -126,5 +183,16 @@ func pyOpenWrite(line string) {
 	for _, line = range lines {
 		fmt.Printf("%s%s\n", pad, line)
 	}
+
+}
+
+func unorderedList() {
+	fmt.Println("<ul>")
+	for i := 0; i < 3; i++ {
+		fmt.Println("\t<li>")
+		fmt.Println("\t\tthing")
+		fmt.Println("\t</li>")
+	}
+	fmt.Println("</ul>")
 
 }
