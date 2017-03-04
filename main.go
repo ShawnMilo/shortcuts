@@ -22,7 +22,7 @@ func main() {
 		t := s.Text()
 		line := strings.TrimSpace(s.Text())
 		if strings.HasPrefix(line, "nnf") {
-			printNotNilFatal(t)
+			printNotNilFatal()
 		} else if strings.HasPrefix(line, "lpf(") {
 			printLogPrintf(t)
 		} else if strings.HasPrefix(line, "fpf(") {
@@ -39,7 +39,7 @@ func main() {
 			consoleLogVar(line)
 		} else if line == "gomain" {
 			goMain()
-		} else if line == "gows" {
+		} else if line == "serve" {
 			goWebserver()
 		} else if line == "pymain" {
 			pyMain()
@@ -47,7 +47,7 @@ func main() {
 			unorderedList(len(t) - len(strings.TrimLeft(line, " \t")))
 		} else if line == "html5" {
 			html5()
-		} else if line == "wo:" {
+		} else if line == "ow:" {
 			pyOpenWrite(t)
 		} else if line == "ubb" {
 			fmt.Println("#!/usr/bin/env bash")
@@ -61,15 +61,11 @@ func main() {
 	}
 }
 
-func printNotNilFatal(line string) {
-	l := len(line) - len(strings.TrimLeft(line, " "))
-	pad := strings.Repeat(" ", l)
-	msg := strings.SplitN(line, ":", 2)[1]
-
+func printNotNilFatal() {
 	// print error block
-	fmt.Printf("%sif err != nil{\n", pad)
-	fmt.Printf("%s%slog.Fatal(%q, err)\n", pad, pad, msg+": ")
-	fmt.Printf("%s}\n", pad)
+	fmt.Println("if err != nil{")
+	fmt.Println(`log.Fatalf("Failed to do something: %s\n", err)`)
+	fmt.Println("}")
 }
 
 func printLogPrintf(line string) {
