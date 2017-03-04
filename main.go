@@ -44,7 +44,7 @@ func main() {
 		} else if line == "pymain" {
 			pyMain()
 		} else if line == "ul" {
-			unorderedList()
+			unorderedList(len(t) - len(strings.TrimLeft(line, " \t")))
 		} else if line == "html5" {
 			html5()
 		} else if line == "wo:" {
@@ -186,13 +186,19 @@ func pyOpenWrite(line string) {
 
 }
 
-func unorderedList() {
+func unorderedList(margin int) {
+	padding := strings.Repeat(" ", margin)
+	fmt.Printf(padding)
 	fmt.Println("<ul>")
 	for i := 0; i < 3; i++ {
+		fmt.Printf(padding)
 		fmt.Println("\t<li>")
+		fmt.Printf(padding)
 		fmt.Println("\t\tthing")
+		fmt.Printf(padding)
 		fmt.Println("\t</li>")
 	}
+	fmt.Printf(padding)
 	fmt.Println("</ul>")
 
 }
