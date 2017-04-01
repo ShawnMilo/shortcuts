@@ -171,8 +171,13 @@ func html5() {
 }
 
 func httpHandlerFunc(line string) {
-	name := strings.Split(line, " ")[1]
-	fmt.Printf("func %s(w http.ResponseWriter, r *http.Request){\n", name)
+	parts := strings.Split(line, " ")
+	name := "index"
+	if len(parts) > 1 {
+		name = parts[1]
+	}
+	fmt.Printf(`func %s(w http.ResponseWriter, r *http.Request){
+	}`, name)
 }
 
 func pyOpenWrite(line string) {
