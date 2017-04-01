@@ -19,55 +19,57 @@ func main() {
 
 	s := bufio.NewScanner(os.Stdin)
 	for s.Scan() {
-		t := s.Text()
-		line := strings.TrimSpace(s.Text())
-		if strings.HasPrefix(line, "nnf") {
+		line := s.Text()
+		trim := strings.TrimSpace(s.Text())
+		if strings.HasPrefix(trim, "nnf") {
 			printNotNilFatal()
-		} else if strings.HasPrefix(line, "nnl") {
+		} else if strings.HasPrefix(trim, "nnl") {
 			printNotNilLog()
-		} else if line == "openFile" {
+		} else if trim == "openFile" {
 			openFile()
-		} else if line == "getURL" {
+		} else if trim == "reqStdin" {
+			reqStdin()
+		} else if trim == "getURL" {
 			getURL()
-		} else if strings.HasPrefix(line, "lpf(") {
-			printLogPrintf(t)
-		} else if strings.HasPrefix(line, "fpf(") {
-			fPrintf(t)
-		} else if strings.HasPrefix(line, "fpl(") {
-			fPrintln(t)
-		} else if strings.HasPrefix(line, "hfunc") {
-			httpHandlerFunc(t)
-		} else if strings.HasPrefix(line, "lpl(") {
-			lPrintln(t)
-		} else if line == "gomain" {
+		} else if strings.HasPrefix(trim, "lpf(") {
+			printLogPrintf(line)
+		} else if strings.HasPrefix(trim, "fpf(") {
+			fPrintf(line)
+		} else if strings.HasPrefix(trim, "fpl(") {
+			fPrintln(line)
+		} else if strings.HasPrefix(trim, "hfunc") {
+			httpHandlerFunc(line)
+		} else if strings.HasPrefix(trim, "lpl(") {
+			lPrintln(line)
+		} else if trim == "gomain" {
 			goMain()
-		} else if line == "serve" {
+		} else if trim == "serve" {
 			goWebserver()
-		} else if line == "pymain" {
+		} else if trim == "pymain" {
 			pyMain()
-		} else if line == "ul" {
-			unorderedList(len(t) - len(strings.TrimLeft(line, " \t")))
-		} else if line == "html5" {
+		} else if trim == "ul" {
+			unorderedList(len(line) - len(strings.TrimLeft(trim, " \t")))
+		} else if trim == "html5" {
 			html5()
-		} else if line == "ow:" {
-			pyOpenWrite(t)
-		} else if line == "ubb" {
+		} else if trim == "ow:" {
+			pyOpenWrite(line)
+		} else if trim == "ubb" {
 			fmt.Println("#!/usr/bin/env bash")
-		} else if line == "ubp" {
+		} else if trim == "ubp" {
 			fmt.Println("#!/usr/bin/env python")
-		} else if strings.HasPrefix(line, "t.t") {
+		} else if strings.HasPrefix(trim, "t.t") {
 			fmt.Println("func TestFoo (t *testing.T){")
 		} else {
-			fmt.Println(t)
+			fmt.Println(line)
 		}
 	}
 }
 
 func printNotNilFatal() {
 	// print error block
-	fmt.Println("if err != nil{")
-	fmt.Println(`log.Fatalf("Failed to do something: %s\n", err)`)
-	fmt.Println("}")
+	fmt.Println(`if err != nil{
+	log.Fatalf("Failed to do something: %s\n", err)
+}`)
 }
 
 func printNotNilLog() {
@@ -220,4 +222,14 @@ func getURL() {
 		return
 	}
 	`)
+}
+
+func reqStdin() {
+	fmt.Println(`stat, err := os.Stdin.Stat()
+	if err != nil {
+		log.Fatal(err)
+	}
+	if stat.Mode()&os.ModeCharDevice != 0 {
+		log.Fatal("please pipe in some data")
+	}`)
 }
