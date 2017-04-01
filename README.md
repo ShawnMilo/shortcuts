@@ -22,6 +22,8 @@ From normal mode:
 
 This is not recommended unless you know what you're doing. It _will_ overwrite your buffer in insert mode while you're in the midst of editing. You can lose work.
 
+The vimscript function exists solely to restore the cursor to its previous position; by default the cursor is returned to the top of the file after the buffer is completely rewritten, which tends to interrupt the flow of coding. Otherwise, all this does is automate the call to `:%! shortcuts` shown above.
+
 ```vim
 set updatetime=1000 
 " pause in activity in insert mode
