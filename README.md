@@ -32,10 +32,7 @@ set updatetime=1000
 autocmd CursorHoldI * :call Shortcuts()
 function Shortcuts()
     let pos = getcurpos()
-    let offset = pos[2] 
-    let args = {"file": expand("%:p"), "line": getline("."), "line_num": pos[1], "col_num": pos[2]}
     execute "%!shortcuts"
-    execute args["line_num"] + "G"
     :call cursor(pos[1], pos[2]) 
 endfunction
 ```
