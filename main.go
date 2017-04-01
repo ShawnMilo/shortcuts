@@ -44,6 +44,8 @@ func main() {
 			lPrintln(line)
 		} else if trim == "gomain" {
 			goMain()
+		} else if trim == "tempFile" {
+			tempFile()
 		} else if trim == "now" {
 			fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
 		} else if trim == "serve" {
@@ -235,4 +237,14 @@ func reqStdin() {
 	if stat.Mode()&os.ModeCharDevice != 0 {
 		log.Fatal("please pipe in some data")
 	}`)
+}
+
+func tempFile() {
+	fmt.Println(`t, err := ioutil.TempFile("", "temp")
+if err != nil{
+	log.Fatalf("Unable to create temp file: %s\n", err)
+}
+fmt.Printf("Created temp file %q\n", t.Name())
+defer t.Close()
+`)
 }
