@@ -2,6 +2,8 @@
 
 A command-line tool meant to be used from vim, but equally useful in any shell piping situation.
 
+You can use this basic idea to write your own "shortcuts" in any language -- as long as it can accept input from stdin and write to stdout. You know -- like everything should. :sunglasses:
+
 Like many of my other projects, this is only intended to be suitable for use by the author, and is only on GitHub for my convenience. You are welcome to use it, or change it to make it better for your own needs, but it will probably never cater to a general audience.
 
 # usage
@@ -9,7 +11,7 @@ Like many of my other projects, this is only intended to be suitable for use by 
 ## shell
 
 ```bash
-shortcuts < old.txt > new.wxt
+shortcuts < old.txt > new.txt
 ```
 
 ## vim 
