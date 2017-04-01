@@ -36,9 +36,7 @@ function Shortcuts()
     let args = {"file": expand("%:p"), "line": getline("."), "line_num": pos[1], "col_num": pos[2]}
     execute "%!shortcuts"
     execute args["line_num"] + "G"
-    " execute ":normal! " . offset . "|"
     :call cursor(pos[1], pos[2]) 
-    " execute ":normal! 0" . offset . "l"
 endfunction
 ```
 
