@@ -39,10 +39,6 @@ func main() {
 			httpHandlerFunc(t)
 		} else if strings.HasPrefix(line, "lpl(") {
 			lPrintln(t)
-		} else if strings.HasPrefix(line, "clog(") {
-			consoleLog(t)
-		} else if strings.HasPrefix(line, "clogVar") {
-			consoleLogVar(line)
 		} else if line == "gomain" {
 			goMain()
 		} else if line == "serve" {
@@ -91,15 +87,6 @@ func fPrintf(line string) {
 
 func lPrintln(line string) {
 	fmt.Println(strings.Replace(line, "lpl(", "log.Println(", 1))
-}
-
-func consoleLog(line string) {
-	fmt.Println(strings.Replace(line, "clog(", "console.log(", 1))
-}
-
-func consoleLogVar(line string) {
-	name := strings.Split(line, " ")[1]
-	fmt.Printf("console.Log(\"%s: \" + %s);\n", name, name)
 }
 
 func fPrintln(line string) {
