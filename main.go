@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -43,6 +44,8 @@ func main() {
 			lPrintln(line)
 		} else if trim == "gomain" {
 			goMain()
+		} else if trim == "now" {
+			fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
 		} else if trim == "serve" {
 			goWebserver()
 		} else if trim == "pymain" {
