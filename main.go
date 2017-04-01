@@ -23,6 +23,12 @@ func main() {
 		line := strings.TrimSpace(s.Text())
 		if strings.HasPrefix(line, "nnf") {
 			printNotNilFatal()
+		} else if strings.HasPrefix(line, "nnl") {
+			printNotNilLog()
+		} else if line == "openFile" {
+			openFile()
+		} else if line == "getURL" {
+			getURL()
 		} else if strings.HasPrefix(line, "lpf(") {
 			printLogPrintf(t)
 		} else if strings.HasPrefix(line, "fpf(") {
@@ -53,8 +59,8 @@ func main() {
 			fmt.Println("#!/usr/bin/env bash")
 		} else if line == "ubp" {
 			fmt.Println("#!/usr/bin/env python")
-		} else if strings.Contains(t, "(t.t)") {
-			fmt.Println(strings.Replace(t, "(t.t)", "(t *testing.T)", 1))
+		} else if strings.HasPrefix(line, "t.t") {
+			fmt.Println("func TestFoo (t *testing.T){")
 		} else {
 			fmt.Println(t)
 		}
@@ -65,6 +71,13 @@ func printNotNilFatal() {
 	// print error block
 	fmt.Println("if err != nil{")
 	fmt.Println(`log.Fatalf("Failed to do something: %s\n", err)`)
+	fmt.Println("}")
+}
+
+func printNotNilLog() {
+	// print error block
+	fmt.Println("if err != nil{")
+	fmt.Println(`log.Printf("Failed to do something: %s\n", err)`)
 	fmt.Println("}")
 }
 
@@ -197,4 +210,27 @@ func unorderedList(margin int) {
 	fmt.Printf(padding)
 	fmt.Println("</ul>")
 
+}
+
+func openFile() {
+	fmt.Println(`f, err := os.Open(filename)
+	if err != nil {
+		log.Printf("Unable to open %q: %s\n", filename, err)
+	}
+	defer f.Close()`)
+}
+
+func getURL() {
+	fmt.Println(`resp, err := http.Get(link)
+	if err != nil {
+		log.Printf("Unable to fetch %q: %s\n", link, err)
+		return
+	}
+	defer resp.Body.Close()
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("Unable to read response from  %q: %s\n", link, err)
+		return
+	}
+	`)
 }
