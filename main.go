@@ -48,8 +48,8 @@ func main() {
 			tempFile()
 		} else if trim == "now" {
 			fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
-		} else if trim == "serve" {
-			goWebserver()
+		} else if trim == "serveHTTP" {
+			serveHTTP()
 		} else if trim == "pymain" {
 			pyMain()
 		} else if trim == "ul" {
@@ -113,7 +113,7 @@ func main() {
 `)
 }
 
-func goWebserver() {
+func serveHTTP() {
 	fmt.Println(`package main
 
 import (
