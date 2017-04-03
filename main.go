@@ -63,7 +63,8 @@ func main() {
 		} else if trim == "ubp" {
 			fmt.Println("#!/usr/bin/env python")
 		} else if strings.HasPrefix(trim, "t.t") {
-			fmt.Println("func TestFoo (t *testing.T){")
+			fmt.Println(`func TestFoo (t *testing.T){
+			}`)
 		} else {
 			fmt.Println(line)
 		}
@@ -71,17 +72,15 @@ func main() {
 }
 
 func printNotNilFatal() {
-	// print error block
 	fmt.Println(`if err != nil{
 	log.Fatalf("Failed to do something: %s\n", err)
-}`)
+	}`)
 }
 
 func printNotNilLog() {
-	// print error block
-	fmt.Println("if err != nil{")
-	fmt.Println(`log.Printf("Failed to do something: %s\n", err)`)
-	fmt.Println("}")
+	fmt.Println(`if err != nil{
+	log.Printf("Failed to do something: %s\n", err)
+	}`)
 }
 
 func printLogPrintf(line string) {
