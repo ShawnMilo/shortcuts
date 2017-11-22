@@ -9,6 +9,33 @@ import (
 	"time"
 )
 
+var replace = map[string]func(){
+	"nnf":       nnf,
+	"nnl":       nnl,
+	"openFile":  openFile,
+	"readFile":  readFile,
+	"getURL":    getURL,
+	"reqStdin":  reqStdin,
+	"goMain":    goMain,
+	"tempFile":  tempFile,
+	"serveHTTP": serveHTTP,
+	"pymain":    pyMain,
+	"html5":     html5,
+	"now":       now,
+	"ubb":       bash,
+	"ubp":       python,
+}
+
+var update = map[string]func(string){
+	"lpf(":  lpf,
+	"lpl(":  lpl,
+	"fpf(":  fpf,
+	"fpl(":  fpl,
+	"hfunc": hfunc,
+	"ow:":   pyOpenWrite,
+	"ul":    ul,
+}
+
 func main() {
 	stat, err := os.Stdin.Stat()
 	if err != nil {
@@ -22,82 +49,51 @@ func main() {
 	for s.Scan() {
 		line := s.Text()
 		trim := strings.TrimSpace(s.Text())
-		if strings.HasPrefix(trim, "nnf") {
-			printNotNilFatal()
-		} else if strings.HasPrefix(trim, "nnl") {
-			printNotNilLog()
-		} else if trim == "openFile" {
-			openFile()
-		} else if trim == "readFile" {
-			readFile()
-		} else if trim == "reqStdin" {
-			reqStdin()
-		} else if trim == "getURL" {
-			getURL()
-		} else if strings.HasPrefix(trim, "lpf(") {
-			printLogPrintf(line)
-		} else if strings.HasPrefix(trim, "fpf(") {
-			fPrintf(line)
-		} else if strings.HasPrefix(trim, "fpl(") {
-			fPrintln(line)
-		} else if strings.HasPrefix(trim, "hfunc") {
-			httpHandlerFunc(line)
-		} else if strings.HasPrefix(trim, "lpl(") {
-			lPrintln(line)
-		} else if trim == "gomain" {
-			goMain()
-		} else if trim == "tempFile" {
-			tempFile()
-		} else if trim == "now" {
-			fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
-		} else if trim == "serveHTTP" {
-			serveHTTP()
-		} else if trim == "pymain" {
-			pyMain()
-		} else if trim == "ul" {
-			unorderedList(len(line) - len(strings.TrimLeft(trim, " \t")))
-		} else if trim == "html5" {
-			html5()
-		} else if trim == "ow:" {
-			pyOpenWrite(line)
-		} else if trim == "ubb" {
-			fmt.Println("#!/usr/bin/env bash")
-		} else if trim == "ubp" {
-			fmt.Println("#!/usr/bin/env python")
-		} else if strings.HasPrefix(trim, "t.t") {
-			fmt.Println(`func TestFoo (t *testing.T){
-			}`)
-		} else {
-			fmt.Println(line)
+
+		if f, found := replace[trim]; found {
+			f()
+			continue
 		}
+
+	DONE:
+		for pre := range update {
+			if strings.HasPrefix(trim, pre) {
+				update[pre](trim)
+				break DONE
+			}
+
+			continue
+		}
+		fmt.Println(line)
 	}
+
 }
 
-func printNotNilFatal() {
+func nnf() {
 	fmt.Println(`if err != nil{
 	log.Fatalf("Failed to do something: %s\n", err)
 	}`)
 }
 
-func printNotNilLog() {
+func nnl() {
 	fmt.Println(`if err != nil{
 	log.Printf("Failed to do something: %s\n", err)
 	}`)
 }
 
-func printLogPrintf(line string) {
+func lpf(line string) {
 	fmt.Println(strings.Replace(line, "lpf(", "log.Printf(", 1))
 }
 
-func fPrintf(line string) {
+func fpf(line string) {
 	fmt.Println(strings.Replace(line, "fpf(", "fmt.Printf(", 1))
 }
 
-func lPrintln(line string) {
+func lpl(line string) {
 	fmt.Println(strings.Replace(line, "lpl(", "log.Println(", 1))
 }
 
-func fPrintln(line string) {
+func fpl(line string) {
 	fmt.Println(strings.Replace(line, "fpl(", "fmt.Println(", 1))
 }
 
@@ -171,7 +167,7 @@ func html5() {
 `)
 }
 
-func httpHandlerFunc(line string) {
+func hfunc(line string) {
 	parts := strings.Split(line, " ")
 	name := "index"
 	if len(parts) > 1 {
@@ -195,7 +191,9 @@ func pyOpenWrite(line string) {
 
 }
 
-func unorderedList(margin int) {
+func ul(line string) {
+	trim := strings.TrimSpace(line)
+	margin := len(line) - len(strings.TrimLeft(trim, " \t"))
 	padding := strings.Repeat(" ", margin)
 	fmt.Printf(padding)
 	fmt.Println("<ul>")
@@ -260,4 +258,16 @@ if err != nil{
 fmt.Printf("Created temp file %q\n", t.Name())
 defer t.Close()
 `)
+}
+
+func now() {
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
+}
+
+func bash() {
+	fmt.Println("#!/usr/bin/env bash")
+}
+
+func python() {
+	fmt.Println("#!/usr/bin/env python")
 }
