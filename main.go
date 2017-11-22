@@ -28,6 +28,8 @@ func main() {
 			printNotNilLog()
 		} else if trim == "openFile" {
 			openFile()
+		} else if trim == "readFile" {
+			readFile()
 		} else if trim == "reqStdin" {
 			reqStdin()
 		} else if trim == "getURL" {
@@ -216,6 +218,13 @@ func openFile() {
 		log.Printf("Unable to open %q: %s\n", filename, err)
 	}
 	defer f.Close()`)
+}
+
+func readFile() {
+	fmt.Println(`b, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Printf("Unable to open %q: %s\n", filename, err)
+	}`)
 }
 
 func getURL() {
