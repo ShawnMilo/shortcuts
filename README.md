@@ -37,4 +37,6 @@ function Shortcuts()
 endfunction
 ```
 
-BSD licenced.
+### License
+
+Two-clause BSD licence.
