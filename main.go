@@ -30,10 +30,10 @@ var replace = map[string]func(){
 }
 
 var update = map[string]func(string){
+	"fpl(":  fpl,
 	"lpf(":  lpf,
 	"lpl(":  lpl,
 	"fpf(":  fpf,
-	"fpl(":  fpl,
 	"hfunc": hfunc,
 	"ow:":   pyOpenWrite,
 	"ul":    ul,
@@ -49,6 +49,7 @@ func main() {
 	}
 
 	s := bufio.NewScanner(os.Stdin)
+
 	for s.Scan() {
 		line := s.Text()
 		trim := strings.TrimSpace(s.Text())
@@ -58,16 +59,19 @@ func main() {
 			continue
 		}
 
+		var replaced bool
 	DONE:
 		for pre := range update {
 			if strings.HasPrefix(trim, pre) {
 				update[pre](trim)
+				replaced = true
 				break DONE
 			}
 
-			continue
 		}
-		fmt.Println(line)
+		if !replaced {
+			fmt.Println(line)
+		}
 	}
 
 }
