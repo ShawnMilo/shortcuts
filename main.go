@@ -26,6 +26,7 @@ var replace = map[string]func(){
 	"ubp":       python,
 	"gomain":    goMain,
 	"flagsh":    flagsh,
+	"dummyType": dummyType,
 }
 
 var update = map[string]func(string){
@@ -293,5 +294,14 @@ sleep 5
         fi
     done
 done
+`)
+}
+
+func dummyType() {
+	fmt.Println(`type dummy struct {
+    thing string
+    size int
+    color string
+}
 `)
 }
