@@ -24,6 +24,8 @@ var replace = map[string]func(){
 	"now":       now,
 	"ubb":       bash,
 	"ubp":       python,
+	"gomain":    goMain,
+	"flagsh":    flagsh,
 }
 
 var update = map[string]func(string){
@@ -270,4 +272,26 @@ func bash() {
 
 func python() {
 	fmt.Println("#!/usr/bin/env python")
+}
+
+func flagsh() {
+
+	fmt.Println(`#!/usr/bin/env bash
+
+flag=$(mktemp)
+touch $flag
+
+while true; do
+sleep 5
+    find . -mmin -1 -name '*.go' 2>>/dev/null | while read file; do
+        if [[ "$file" -nt $flag ]]; then
+            if [[ "$file" == "$flag" ]]; then
+                continue
+            fi
+            echo "$file was updated"
+            touch $flag
+        fi
+    done
+done
+`)
 }
