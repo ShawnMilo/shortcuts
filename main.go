@@ -40,6 +40,10 @@ var update = map[string]func(string){
 }
 
 func main() {
+	if os.Getenv("shortcuts") == "off" {
+		return
+	}
+
 	stat, err := os.Stdin.Stat()
 	if err != nil {
 		log.Fatal(err)
@@ -161,14 +165,27 @@ func html5() {
 	<head>
 		<meta charset="UTF-8">
 		<title>title</title>
-		<link rel="stylesheet" href="./css/style.css" type="text/css">
+        <link rel="stylesheet" href="https://aoeus.com/milligram.min.css" type="text/css">
 		<meta name="viewport" content="width-device-width, initial-scale=1">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <style type="text/css">
+            body{
+                margin: 40px auto;
+                max-width: 650px;
+                line-height: 1.6;
+                font-size: 18px; 
+                color: #444;
+                padding:0 10px;
+            }   
+            h1,h2,h3{
+                line-height:1.2
+            }   
+        </style>
 	</head>
 	<body>
-		<div>
-			<p>content</p>
-		</div>
+        <article>
+            <h1>topic</h1>
+            <p>content</p>
+        </article>
 	</body>
 </html>
 `)
