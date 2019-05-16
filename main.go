@@ -39,6 +39,8 @@ var update = map[string]func(string){
 	"ul":    ul,
 }
 
+var dom = []string{"div", "form", "section", "article", "body", "header"}
+
 func main() {
 	if os.Getenv("shortcuts") == "off" {
 		return
@@ -56,7 +58,7 @@ func main() {
 
 	for s.Scan() {
 		line := s.Text()
-		trim := strings.TrimSpace(s.Text())
+		trim := strings.TrimSpace(line)
 
 		if f, found := replace[trim]; found {
 			f()
@@ -64,12 +66,19 @@ func main() {
 		}
 
 		var replaced bool
-	DONE:
 		for pre := range update {
 			if strings.HasPrefix(trim, pre) {
-				update[pre](trim)
+				update[pre](line)
 				replaced = true
-				break DONE
+				break 
+			}
+
+		}
+		for _, pre := range dom {
+			if strings.HasPrefix(trim, pre) {
+				element(line, pre)
+				replaced = true
+				break
 			}
 
 		}
@@ -232,6 +241,24 @@ func ul(line string) {
 	fmt.Printf(padding)
 	fmt.Println("</ul>")
 
+}
+
+func element(line , el string) {
+	margin := len(line) - len(strings.TrimLeft(line, " \t"))
+	padding := line[0:margin]
+	fmt.Printf(padding)
+	fmt.Println("<" + el + ">")
+	fmt.Printf(padding)
+	fmt.Println("</" + el + ">")
+}
+
+func form(line string) {
+	margin := len(line) - len(strings.TrimLeft(line, " \t"))
+	padding := line[0:margin]
+	fmt.Printf(padding)
+	fmt.Println("<form>")
+	fmt.Printf(padding)
+	fmt.Println("</form>")
 }
 
 func openFile() {
