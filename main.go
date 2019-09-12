@@ -81,7 +81,6 @@ func main() {
 			fmt.Println(line)
 		}
 	}
-
 }
 
 func nnf() {
