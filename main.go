@@ -12,6 +12,7 @@ import (
 var replace = map[string]func(){
 	"nnf":       nnf,
 	"nnl":       nnl,
+	"dbg":       dbg,
 	"openFile":  openFile,
 	"readFile":  readFile,
 	"getURL":    getURL,
@@ -90,6 +91,12 @@ func nnl() {
 	fmt.Println(`if err != nil{
 	log.Printf("Failed to do something: %s\n", err)
 	}`)
+}
+
+func dbg() {
+	weekday := string([]rune(time.Now().Weekday().String())[0])
+	day := time.Now().Day()
+	fmt.Println(fmt.Sprintf(`log.Printf("%s%d %%v", x)`, weekday, day))
 }
 
 func lpf(line string) {
@@ -172,13 +179,13 @@ func html5() {
                 margin: 40px auto;
                 max-width: 650px;
                 line-height: 1.6;
-                font-size: 18px; 
+                font-size: 18px;
                 color: #444;
                 padding:0 10px;
-            }   
+            }
             h1,h2,h3{
                 line-height:1.2
-            }   
+            }
         </style>
 	</head>
 	<body>
