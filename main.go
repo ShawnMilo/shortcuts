@@ -28,6 +28,10 @@ var replace = map[string]func(){
 	"gomain":    goMain,
 	"flagsh":    flagsh,
 	"dummyType": dummyType,
+	"jm":        jsonMarshal,
+	"ju":        jsonUnmarshal,
+	"rb":        readBody,
+	"watcher":   watcher,
 }
 
 var update = map[string]func(string){
@@ -57,7 +61,7 @@ func main() {
 
 	for s.Scan() {
 		line := s.Text()
-		trim := strings.TrimSpace(s.Text())
+		trim := strings.TrimSpace(line)
 
 		if f, found := replace[trim]; found {
 			f()
@@ -65,12 +69,11 @@ func main() {
 		}
 
 		var replaced bool
-	DONE:
 		for pre := range update {
 			if strings.HasPrefix(trim, pre) {
-				update[pre](trim)
+				update[pre](line)
 				replaced = true
-				break DONE
+				break
 			}
 
 		}
@@ -175,7 +178,8 @@ func html5() {
         <link rel="stylesheet" href="https://aoeus.com/milligram.min.css" type="text/css">
 		<meta name="viewport" content="width-device-width, initial-scale=1">
         <style type="text/css">
-            body{
+            <body>
+            </body>
                 margin: 40px auto;
                 max-width: 650px;
                 line-height: 1.6;
@@ -239,6 +243,24 @@ func ul(line string) {
 	fmt.Printf(padding)
 	fmt.Println("</ul>")
 
+}
+
+func element(line, el string) {
+	margin := len(line) - len(strings.TrimLeft(line, " \t"))
+	padding := line[0:margin]
+	fmt.Printf(padding)
+	fmt.Println("<" + el + ">")
+	fmt.Printf(padding)
+	fmt.Println("</" + el + ">")
+}
+
+func form(line string) {
+	margin := len(line) - len(strings.TrimLeft(line, " \t"))
+	padding := line[0:margin]
+	fmt.Printf(padding)
+	fmt.Println("<form>")
+	fmt.Printf(padding)
+	fmt.Println("</form>")
 }
 
 func openFile() {
@@ -332,4 +354,57 @@ func dummyType() {
     color string
 }
 `)
+}
+func jsonMarshal() {
+	fmt.Println(`b, err := json.Marshal(x)
+    if err != nil{
+        log.Fatalf("Failed to do something: %s\n", err)
+	} `)
+}
+
+func jsonUnmarshal() {
+	fmt.Println(`var x thing
+err = json.Unmarshal(b, &x)
+return x, err
+`)
+}
+
+func readBody() {
+	fmt.Println(`b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return err
+	}
+	defer r.Body.Close()`)
+}
+
+func watcher() {
+	fmt.Println(`#!/usr/bin/env bash
+
+bin=monkey
+flag=$(mktemp)
+code=main.go
+
+function cleanup() {
+    pkill $bin
+    rm -f $bin
+    rm -f $flag
+    exit
+}
+
+trap cleanup SIGINT SIGTERM
+
+while true
+do
+    if [ ! "$code" -nt $flag ]; then
+        sleep 5
+        continue
+    fi
+    go build -o $bin $code || { touch $flag; continue; }
+    pkill $bin
+    ./$bin &
+    sleep 1
+    ./tests.sh
+    touch $flag
+    sleep 15
+done`)
 }
