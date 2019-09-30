@@ -58,6 +58,7 @@ func main() {
 	}
 
 	s := bufio.NewScanner(os.Stdin)
+	var lastBlank bool
 
 	for s.Scan() {
 		line := s.Text()
@@ -78,6 +79,14 @@ func main() {
 
 		}
 		if !replaced {
+			if strings.TrimSpace(line) == "" {
+				if lastBlank {
+					continue
+				}
+				lastBlank = true
+			} else {
+				lastBlank = false
+			}
 			fmt.Println(line)
 		}
 	}
@@ -150,18 +159,16 @@ func index(w http.ResponseWriter, r *http.Request){
 }
 
 func pyMain() {
-	fmt.Println(`#!/usr/bin/env python
+	fmt.Println(`#!/usr/bin/env python3
 """
 You should probably write something here.
 """
-
-from __future__ import unicode_literals
 
 def main():
     """
     Do the thing.
     """
-    print "python"
+    print("python")
 
 if __name__ == '__main__':
     main()
