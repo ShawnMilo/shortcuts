@@ -246,8 +246,8 @@ func pyOpenWrite(line string) {
 }
 
 func contextArg(line string) {
-	strings.Replace(line, "_ctx,", "ctx context.Context,", 1)	
-    fmt.Printf("%s", line)
+	line = strings.Replace(line, "_ctx,", "ctx context.Context,", 1)	
+    fmt.Printf("%s\n", line)
 }
 
 func ul(line string) {
