@@ -44,6 +44,8 @@ var update = map[string]func(string){
 	"ul":    ul,
 }
 
+var modify = map[string]func(string){
+	"_ctx,": contextArg,}
 func main() {
 	if os.Getenv("shortcuts") == "off" {
 		return
@@ -70,44 +72,55 @@ func main() {
 		}
 
 		var replaced bool
-		for pre := range update {
+		for pre , f := range update {
 			if strings.HasPrefix(trim, pre) {
-				update[pre](line)
+				f(line)
 				replaced = true
 				break
 			}
 
 		}
-		if !replaced {
-			if strings.TrimSpace(line) == "" {
-				if lastBlank {
-					continue
-				}
-				lastBlank = true
-			} else {
-				lastBlank = false
+
+		for pre, f := range modify {
+			if strings.Contains(line, pre) {
+				f(line)
+				replaced = true
+				break
 			}
-			fmt.Println(line)
 		}
+
+		if replaced {
+			continue
+		}
+
+		if strings.TrimSpace(line) == "" {
+			if lastBlank {
+				continue
+			}
+			lastBlank = true
+		} else {
+			lastBlank = false
+		}
+		fmt.Println(line)
 	}
 }
 
 func nnf() {
 	fmt.Println(`if err != nil{
-	log.Fatalf("Failed to do something: %s\n", err)
-	}`)
+	 log.Fatalf("Failed to do something: %s\n", err)
+	 }`)
 }
 
 func nnl() {
 	fmt.Println(`if err != nil{
-	log.Printf("Failed to do something: %s\n", err)
-	}`)
+	 log.Printf("Failed to do something: %s\n", err)
+	 }`)
 }
 
 func dbg() {
 	weekday := string([]rune(time.Now().Weekday().String())[0])
 	day := time.Now().Day()
-	fmt.Println(fmt.Sprintf(`log.Printf("%s%d %%v", x)`, weekday, day))
+	fmt.Printf(`log.Printf("%s%d %%v", x)\n`, weekday, day)
 }
 
 func lpf(line string) {
@@ -144,16 +157,16 @@ func serveHTTP() {
 
 import (
     "fmt"
-	"net/http"
+	 "net/http"
 )
 
 func main() {
     http.HandleFunc("/", index)
-	http.ListenAndServe(":8080", nil)
+	 http.ListenAndServe(":8080", nil)
 }
 
 func index(w http.ResponseWriter, r *http.Request){
-	fmt.Fprintf(w, "hello")
+	 fmt.Fprintf(w, "hello")
 }
 `)
 }
@@ -178,11 +191,11 @@ if __name__ == '__main__':
 func html5() {
 	fmt.Println(`<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>title</title>
+	 <head>
+		 <meta charset="UTF-8">
+		 <title>title</title>
         <link rel="stylesheet" href="https://aoeus.com/milligram.min.css" type="text/css">
-		<meta name="viewport" content="width-device-width, initial-scale=1">
+		 <meta name="viewport" content="width-device-width, initial-scale=1">
         <style type="text/css">
             <body>
             </body>
@@ -197,13 +210,13 @@ func html5() {
                 line-height:1.2
             }
         </style>
-	</head>
-	<body>
+	 </head>
+	 <body>
         <article>
             <h1>topic</h1>
             <p>content</p>
         </article>
-	</body>
+	 </body>
 </html>
 `)
 }
@@ -215,7 +228,7 @@ func hfunc(line string) {
 		name = parts[1]
 	}
 	fmt.Printf(`func %s(w http.ResponseWriter, r *http.Request){
-	}`, name)
+	 }`, name)
 }
 
 func pyOpenWrite(line string) {
@@ -230,6 +243,11 @@ func pyOpenWrite(line string) {
 		fmt.Printf("%s%s\n", pad, line)
 	}
 
+}
+
+func contextArg(line string) {
+	strings.Replace(line, "_ctx,", "ctx context.Context,", 1)	
+    fmt.Printf("%s", line)
 }
 
 func ul(line string) {
@@ -251,68 +269,50 @@ func ul(line string) {
 
 }
 
-func element(line, el string) {
-	margin := len(line) - len(strings.TrimLeft(line, " \t"))
-	padding := line[0:margin]
-	fmt.Printf(padding)
-	fmt.Println("<" + el + ">")
-	fmt.Printf(padding)
-	fmt.Println("</" + el + ">")
-}
-
-func form(line string) {
-	margin := len(line) - len(strings.TrimLeft(line, " \t"))
-	padding := line[0:margin]
-	fmt.Printf(padding)
-	fmt.Println("<form>")
-	fmt.Printf(padding)
-	fmt.Println("</form>")
-}
-
 func openFile() {
 	fmt.Println(`f, err := os.Open(filename)
-	if err != nil {
-		log.Printf("Unable to open %q: %s\n", filename, err)
-	}
-	defer f.Close()`)
+	 if err != nil {
+		 log.Printf("Unable to open %q: %s\n", filename, err)
+	 }
+	 defer f.Close()`)
 }
 
 func readFile() {
 	fmt.Println(`b, err := ioutil.ReadFile(filename)
-	if err != nil {
-		log.Printf("Unable to open %q: %s\n", filename, err)
-	}`)
+	 if err != nil {
+		 log.Printf("Unable to open %q: %s\n", filename, err)
+	 }`)
 }
 
 func getURL() {
 	fmt.Println(`resp, err := http.Get(link)
-	if err != nil {
-		log.Printf("Unable to fetch %q: %s\n", link, err)
-		return
-	}
-	defer resp.Body.Close()
-	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Printf("Unable to read response from  %q: %s\n", link, err)
-		return
-	}
-	`)
+	 if err != nil {
+		 log.Printf("Unable to fetch %q: %s\n", link, err)
+		 return
+	 }
+	 defer resp.Body.Close()
+	 b, err := ioutil.ReadAll(resp.Body)
+	 if err != nil {
+		 log.Printf("Unable to read response from  %q: %s\n", link, err)
+		 return
+	 }
+	 `)
 }
 
 func reqStdin() {
 	fmt.Println(`stat, err := os.Stdin.Stat()
-	if err != nil {
-		log.Fatal(err)
-	}
-	if stat.Mode()&os.ModeCharDevice != 0 {
-		log.Fatal("please pipe in some data")
-	}`)
+	 if err != nil {
+		 log.Fatal(err)
+	 }
+	 if stat.Mode()&os.ModeCharDevice != 0 {
+		 log.Fatal("please pipe in some data")
+	 }`)
 }
 
 func tempFile() {
 	fmt.Println(`t, err := ioutil.TempFile("", "temp")
 if err != nil{
-	log.Fatalf("Unable to create temp file: %s\n", err)
+	 log.Fatalf("Unable to create temp file: %s\n", err)
 }
 fmt.Printf("Created temp file %q\n", t.Name())
 defer t.Close()
@@ -365,7 +365,7 @@ func jsonMarshal() {
 	fmt.Println(`b, err := json.Marshal(x)
     if err != nil{
         log.Fatalf("Failed to do something: %s\n", err)
-	} `)
+	 } `)
 }
 
 func jsonUnmarshal() {
@@ -377,10 +377,10 @@ return x, err
 
 func readBody() {
 	fmt.Println(`b, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		return err
-	}
-	defer r.Body.Close()`)
+	 if err != nil {
+		 return err
+	 }
+	 defer r.Body.Close()`)
 }
 
 func watcher() {
@@ -414,3 +414,5 @@ do
     sleep 15
 done`)
 }
+
+
