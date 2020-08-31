@@ -45,7 +45,8 @@ var update = map[string]func(string){
 }
 
 var modify = map[string]func(string){
-	"_ctx,": contextArg,}
+	"_ctx,": contextArg}
+
 func main() {
 	if os.Getenv("shortcuts") == "off" {
 		return
@@ -72,7 +73,7 @@ func main() {
 		}
 
 		var replaced bool
-		for pre , f := range update {
+		for pre, f := range update {
 			if strings.HasPrefix(trim, pre) {
 				f(line)
 				replaced = true
@@ -246,8 +247,8 @@ func pyOpenWrite(line string) {
 }
 
 func contextArg(line string) {
-	line = strings.Replace(line, "_ctx,", "ctx context.Context,", 1)	
-    fmt.Printf("%s\n", line)
+	line = strings.Replace(line, "_ctx,", "ctx context.Context,", 1)
+	fmt.Printf("%s\n", line)
 }
 
 func ul(line string) {
@@ -414,5 +415,3 @@ do
     sleep 15
 done`)
 }
-
-
