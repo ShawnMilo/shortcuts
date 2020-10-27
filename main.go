@@ -1,7 +1,5 @@
 package main
 
-// #exempt
-
 import (
 	"bufio"
 	"fmt"
@@ -10,6 +8,9 @@ import (
 	"strings"
 	"time"
 )
+
+// Don't overwrite *this* file while editing.
+var exemptKey = "1jT18gRquHb4UJXk6XG169YZJ10"
 
 var replace = map[string]func(){
 	"_audit":    audit,
@@ -67,7 +68,7 @@ func main() {
 
 	for s.Scan() {
 		line := s.Text()
-		if strings.TrimSpace(line) == "// #exempt" {
+		if strings.Contains(line, exemptKey) {
 			exempt = true
 		}
 
