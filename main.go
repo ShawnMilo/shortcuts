@@ -1,5 +1,7 @@
 package main
 
+// #exempt
+
 import (
 	"bufio"
 	"fmt"
@@ -10,6 +12,8 @@ import (
 )
 
 var replace = map[string]func(){
+	"_audit":    audit,
+	"_lg":       lg,
 	"nnf":       nnf,
 	"nnl":       nnl,
 	"dbg":       dbg,
@@ -45,13 +49,9 @@ var update = map[string]func(string){
 }
 
 var modify = map[string]func(string){
-	"_ctx,": contextArg}
+	"ctx context.Context,": contextArg}
 
 func main() {
-	if os.Getenv("shortcuts") == "off" {
-		return
-	}
-
 	stat, err := os.Stdin.Stat()
 	if err != nil {
 		log.Fatal(err)
@@ -63,8 +63,19 @@ func main() {
 	s := bufio.NewScanner(os.Stdin)
 	var lastBlank bool
 
+	var exempt bool
+
 	for s.Scan() {
 		line := s.Text()
+		if strings.TrimSpace(line) == "// #exempt" {
+			exempt = true
+		}
+
+		if exempt {
+			fmt.Println(strings.TrimSuffix(line, "\n"))
+			continue
+		}
+
 		trim := strings.TrimSpace(line)
 
 		if f, found := replace[trim]; found {
@@ -104,6 +115,14 @@ func main() {
 		}
 		fmt.Println(line)
 	}
+}
+
+func audit() {
+	fmt.Printf(`// Last audit %s by skm.`, time.Now().Format("2006-01-02"))
+}
+
+func lg() {
+	fmt.Println(`lg := logger.New(ctx)`)
 }
 
 func nnf() {
