@@ -53,6 +53,7 @@ var modify = map[string]string{
 	"_ctx,": "ctx context.Context,",
 	"_ctc":  "Cracking the Cryptic",
 	":sg:":  "😎",
+	":gc:":  "GroovyCar",
 }
 
 func main() {
