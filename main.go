@@ -49,8 +49,11 @@ var update = map[string]func(string){
 	"ul":    ul,
 }
 
-var modify = map[string]func(string){
-	"ctx context.Context,": contextArg}
+var modify = map[string]string{
+	"_ctx,": "ctx context.Context,",
+	"_ctc":  "Cracking the Cryptic",
+	":sg:":  "😎",
+}
 
 func main() {
 	stat, err := os.Stdin.Stat()
@@ -94,11 +97,9 @@ func main() {
 
 		}
 
-		for pre, f := range modify {
+		for pre, post := range modify {
 			if strings.Contains(line, pre) {
-				f(line)
-				replaced = true
-				break
+				line = strings.Replace(line, pre, post, 5)
 			}
 		}
 
@@ -264,11 +265,6 @@ func pyOpenWrite(line string) {
 		fmt.Printf("%s%s\n", pad, line)
 	}
 
-}
-
-func contextArg(line string) {
-	line = strings.Replace(line, "_ctx,", "ctx context.Context,", 1)
-	fmt.Printf("%s\n", line)
 }
 
 func ul(line string) {
