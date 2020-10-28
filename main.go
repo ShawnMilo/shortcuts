@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -47,6 +48,7 @@ var update = map[string]func(string){
 	"hfunc": hfunc,
 	"ow:":   pyOpenWrite,
 	"ul":    ul,
+	":cb:":  markdownCheckboxes,
 }
 
 var modify = map[string]string{
@@ -266,6 +268,22 @@ func pyOpenWrite(line string) {
 		fmt.Printf("%s%s\n", pad, line)
 	}
 
+}
+
+func markdownCheckboxes(line string) {
+	parts := strings.Split(line, ":")
+	if len(parts) < 3 {
+		fmt.Println(line)
+		return
+	}
+	count, err := strconv.Atoi(parts[2])
+	if err != nil {
+		fmt.Println(line)
+		return
+	}
+	for i := 0; i < count; i++ {
+		fmt.Println("- [ ] ")
+	}
 }
 
 func ul(line string) {
