@@ -127,7 +127,7 @@ func audit() {
 }
 
 func lg() {
-	fmt.Println(`lg := logger.New(ctx)`)
+	fmt.Println(`lg := logger.FromContext(ctx)`)
 }
 
 func nnf() {
