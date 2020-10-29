@@ -15,7 +15,7 @@ var exemptKey = "1jT18gRquHb4UJXk6XG169YZJ10"
 
 var replace = map[string]func(){
 	"_audit":    audit,
-	"_wok":    weeksOfCoding,
+	"_wok":      weeksOfCoding,
 	"_lg":       lg,
 	"nnf":       nnf,
 	"nnl":       nnl,
@@ -29,7 +29,6 @@ var replace = map[string]func(){
 	"serveHTTP": serveHTTP,
 	"pymain":    pyMain,
 	"html5":     html5,
-	"now":       now,
 	"ubb":       bash,
 	"ubp":       python,
 	"gomain":    goMain,
@@ -58,6 +57,7 @@ var modify = map[string]string{
 	"_ctc":  "Cracking the Cryptic",
 	":sg:":  "😎",
 	":gc:":  "GroovyCar",
+	":now:": func() string { return time.Now().Format("2006-01-02 15:04:05") }(),
 }
 
 func main() {
@@ -320,9 +320,9 @@ func markdownTable(line string) {
 		for j := 0; j < columns; j++ {
 			fmt.Printf(" aoeus |")
 		}
-        fmt.Printf("\n")
+		fmt.Printf("\n")
 	}
-    fmt.Println()
+	fmt.Println()
 }
 
 func ul(line string) {
@@ -394,8 +394,8 @@ defer t.Close()
 `)
 }
 
-func now() {
-	fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
+func now(line string) {
+	fmt.Println(strings.Replace(line, ":now:", time.Now().Format("2006-01-02 15:04:05"), 1))
 }
 
 func bash() {
