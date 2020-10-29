@@ -276,7 +276,7 @@ func markdownCheckboxes(line string) {
 		fmt.Println(line)
 		return
 	}
-	count, err := strconv.Atoi(parts[2])
+	count, err := strconv.Atoi(strings.TrimSpace(parts[2]))
 	if err != nil {
 		fmt.Println(line)
 		return
