@@ -49,6 +49,7 @@ var update = map[string]func(string){
 	"ow:":   pyOpenWrite,
 	"ul":    ul,
 	":cb:":  markdownCheckboxes,
+	":tb:":  markdownTable,
 }
 
 var modify = map[string]string{
@@ -284,6 +285,39 @@ func markdownCheckboxes(line string) {
 	for i := 0; i < count; i++ {
 		fmt.Println("- [ ] ")
 	}
+}
+
+func markdownTable(line string) {
+	parts := strings.Split(line, ":")
+	if len(parts) < 4 {
+		fmt.Println(line)
+		return
+	}
+	rows, err := strconv.Atoi(strings.TrimSpace(parts[2]))
+	if err != nil {
+		fmt.Println(line)
+		return
+	}
+	columns, err := strconv.Atoi(strings.TrimSpace(parts[3]))
+	if err != nil {
+		fmt.Println(line)
+		return
+	}
+
+	fmt.Printf("|")
+	fmt.Println(strings.Repeat(" aoeus |", columns))
+
+	fmt.Printf("|")
+	fmt.Println(strings.Repeat(" --- |", columns))
+
+	for i := 0; i < rows; i++ {
+		fmt.Printf("|")
+		for j := 0; j < columns; j++ {
+			fmt.Printf(" aoeus |")
+		}
+        fmt.Printf("\n")
+	}
+    fmt.Println()
 }
 
 func ul(line string) {
