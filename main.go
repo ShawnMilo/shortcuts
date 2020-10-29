@@ -15,6 +15,7 @@ var exemptKey = "1jT18gRquHb4UJXk6XG169YZJ10"
 
 var replace = map[string]func(){
 	"_audit":    audit,
+	"_wok":    weeksOfCoding,
 	"_lg":       lg,
 	"nnf":       nnf,
 	"nnl":       nnl,
@@ -125,6 +126,10 @@ func main() {
 
 func audit() {
 	fmt.Printf(`// Last audit %s by skm.`, time.Now().Format("2006-01-02"))
+}
+
+func weeksOfCoding() {
+	fmt.Printf(`"Weeks of coding can save you hours of thinking."`)
 }
 
 func lg() {
