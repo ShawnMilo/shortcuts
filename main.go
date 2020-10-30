@@ -53,11 +53,12 @@ var update = map[string]func(string){
 }
 
 var modify = map[string]string{
-	"_ctx,": "ctx context.Context,",
-	"_ctc":  "Cracking the Cryptic",
-	":sg:":  "😎",
-	":gc:":  "GroovyCar",
-	":now:": func() string { return time.Now().Format("2006-01-02 15:04:05") }(),
+	"_ctx,":  "ctx context.Context,",
+	"_ctc":   "Cracking the Cryptic",
+	":sg:":   "😎",
+	":gc:":   "GroovyCar",
+	":siht:": "So I have that going for me, which is nice.",
+	":now:":  func() string { return time.Now().Format("2006-01-02 15:04:05") }(),
 }
 
 func main() {
