@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -41,15 +42,16 @@ var replace = map[string]func(){
 }
 
 var update = map[string]func(string){
-	"fpl(":  fpl,
-	"lpf(":  lpf,
-	"lpl(":  lpl,
-	"fpf(":  fpf,
-	"hfunc": hfunc,
-	"ow:":   pyOpenWrite,
-	"ul":    ul,
-	":cb:":  markdownCheckboxes,
-	":tb:":  markdownTable,
+	"fpl(":   fpl,
+	"lpf(":   lpf,
+	"lpl(":   lpl,
+	"fpf(":   fpf,
+	"hfunc":  hfunc,
+	"ow:":    pyOpenWrite,
+	"ul":     ul,
+	":cb:":   markdownCheckboxes,
+	":tb:":   markdownTable,
+	":json:": formatJSON,
 }
 
 var modify = map[string]string{
@@ -324,6 +326,22 @@ func markdownTable(line string) {
 		fmt.Printf("\n")
 	}
 	fmt.Println()
+}
+
+func formatJSON(line string) {
+	b := []byte(strings.TrimSpace(line)[6:]) // strip off :json:
+	var thing map[string]interface{}
+	err := json.Unmarshal(b, &thing)
+	if err != nil {
+		fmt.Println(line)
+		return
+	}
+	j, err := json.MarshalIndent(thing, "", "    ")
+	if err != nil {
+		fmt.Println(line)
+		return
+	}
+	fmt.Printf("%s\n", string(j))
 }
 
 func ul(line string) {
