@@ -13,6 +13,7 @@ import (
 
 // Don't overwrite *this* file while editing.
 var exemptKey = "1jT18gRquHb4UJXk6XG169YZJ10"
+var fileType string
 
 var replace = map[string]func(){
 	"_audit":    audit,
@@ -48,7 +49,7 @@ var update = map[string]func(string){
 	"fpf(":   fpf,
 	"hfunc":  hfunc,
 	"ow:":    pyOpenWrite,
-	"_ul":     ul,
+	"ul":     ul,
 	":cb:":   markdownCheckboxes,
 	":tb:":   markdownTable,
 	":json:": formatJSON,
@@ -60,9 +61,9 @@ var modify = map[string]string{
 	":sg:":    "😎",
 	":check:": "✅",
 	":x:":     "❌",
-	":cc:":   "☑",
-	":ce:":   "☐",
-	":cx:":   "☒",
+	":cc:":    "☑",
+	":ce:":    "☐",
+	":cx:":    "☒",
 	":boom:":  "💥",
 	":cool:":  "🆒",
 	":ok:":    "🆗",
@@ -71,7 +72,24 @@ var modify = map[string]string{
 	":now:":   func() string { return time.Now().Format("2006-01-02 15:04:05") }(),
 }
 
+func getFileType(line string) string {
+	if strings.Contains(line, "env python") {
+		return "python"
+	}
+	if strings.Contains(line, "env bash") {
+		return "bash"
+	}
+	if strings.Contains(line, "doctype") {
+		return "html"
+	}
+	if strings.HasPrefix(line, "package") {
+		return "go"
+	}
+	return ""
+}
+
 func main() {
+
 	stat, err := os.Stdin.Stat()
 	if err != nil {
 		log.Fatal(err)
@@ -85,11 +103,18 @@ func main() {
 
 	var exempt bool
 
+	var count int
 	for s.Scan() {
 		line := s.Text()
 		if strings.Contains(line, exemptKey) {
 			exempt = true
 		}
+
+		if count == 0 {
+			fileType = getFileType(line)
+		}
+
+		count++
 
 		if exempt {
 			fmt.Println(strings.TrimSuffix(line, "\n"))
@@ -353,6 +378,10 @@ func formatJSON(line string) {
 }
 
 func ul(line string) {
+	if fileType != "html" {
+		fmt.Println(line)
+		return
+	}
 	trim := strings.TrimSpace(line)
 	margin := len(line) - len(strings.TrimLeft(trim, " \t"))
 	padding := strings.Repeat(" ", margin)
