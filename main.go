@@ -48,7 +48,7 @@ var update = map[string]func(string){
 	"fpf(":   fpf,
 	"hfunc":  hfunc,
 	"ow:":    pyOpenWrite,
-	"ul":     ul,
+	"_ul":     ul,
 	":cb:":   markdownCheckboxes,
 	":tb:":   markdownTable,
 	":json:": formatJSON,
