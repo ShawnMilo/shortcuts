@@ -79,17 +79,22 @@ func getFileType(line string) string {
 	if strings.Contains(line, "env bash") {
 		return "bash"
 	}
+	if strings.Contains(line, "env fish") {
+		return "fish"
+	}
 	if strings.Contains(line, "doctype") {
 		return "html"
 	}
 	if strings.HasPrefix(line, "package") {
 		return "go"
 	}
+	if strings.HasPrefix(line, "= ") {
+		return "adoc"
+	}
 	return ""
 }
 
 func main() {
-
 	stat, err := os.Stdin.Stat()
 	if err != nil {
 		log.Fatal(err)
@@ -111,7 +116,11 @@ func main() {
 		}
 
 		if count == 0 {
-			fileType = getFileType(line)
+			if len(os.Args) == 2 {
+				fileType = os.Args[1]
+			} else {
+				fileType = getFileType(line)
+			}
 		}
 
 		count++
