@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -31,6 +32,8 @@ var replace = map[string]func(){
 	"serveHTTP": serveHTTP,
 	"pymain":    pyMain,
 	"html5":     html5,
+	"_adoca":    adocArticle,
+	"_adocb":    adocBook,
 	"ubb":       bash,
 	"ubp":       python,
 	"gomain":    goMain,
@@ -297,6 +300,35 @@ func html5() {
 `)
 }
 
+func adocArticle() {
+	name := fromGitConfig("user.name")
+	email := fromGitConfig("user.email") 
+	date := time.Now().Format("2006-01-02")
+	fmt.Printf(`= Document Title
+%s <%s>
+v0.1, %s
+:doctype: article
+:source-highlighter: pygments
+:toc:
+:icons: font`, name, email, date)
+}
+
+func adocBook() {
+	name := fromGitConfig("user.name") 
+	email := fromGitConfig("user.email")
+	date := time.Now().Format("2006-01-02")
+	fmt.Printf(`= Document Title
+%s <%s>
+v0.1, %s
+:doctype: book
+:source-highlighter: pygments
+:toc:
+:icons: font
+
+[index]
+== Index`, name, email, date)
+}
+
 func hfunc(line string) {
 	parts := strings.Split(line, " ")
 	name := "index"
@@ -553,4 +585,19 @@ do
     touch $flag
     sleep 15
 done`)
+}
+
+func fromGitConfig(value string) string {
+	// git config --list
+	cmd := exec.Command("git", "config", "--list")
+	out, err := cmd.Output()
+	if err != nil {
+		return ""
+	}
+	for _, line := range strings.Split(string(out), "\n") {
+		if strings.HasPrefix(line, value) {
+			return strings.TrimSpace(line[len(value)+1:])
+		}
+	}
+	return ""
 }
