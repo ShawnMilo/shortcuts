@@ -302,23 +302,24 @@ func html5() {
 
 func adocArticle() {
 	name := fromGitConfig("user.name")
-	email := fromGitConfig("user.email") 
+	email := fromGitConfig("user.email")
 	date := time.Now().Format("2006-01-02")
 	fmt.Printf(`= Article Title
 %s <%s>
 v0.1, %s
 :doctype: article
 :source-highlighter: pygments
+:toc:
 :icons: font`, name, email, date)
 }
 
 func adocBook() {
-	name := fromGitConfig("user.name") 
+	name := fromGitConfig("user.name")
 	email := fromGitConfig("user.email")
 	date := time.Now().Format("2006-01-02")
 	fmt.Printf(`= Book Title
 %s <%s>
-v0.1, %s
+v0.1.0, %s
 :doctype: book
 :source-highlighter: pygments
 :toc:
