@@ -17,32 +17,33 @@ var exemptKey = "1jT18gRquHb4UJXk6XG169YZJ10"
 var fileType string
 
 var replace = map[string]func(){
-	"_audit":    audit,
-	"_wok":      weeksOfCoding,
-	"_lg":       lg,
-	"nnf":       nnf,
-	"nnl":       nnl,
-	"dbg":       dbg,
-	"openFile":  openFile,
-	"readFile":  readFile,
-	"getURL":    getURL,
-	"reqStdin":  reqStdin,
-	"goMain":    goMain,
-	"tempFile":  tempFile,
-	"serveHTTP": serveHTTP,
-	"pymain":    pyMain,
-	"html5":     html5,
 	"_adoca":    adocArticle,
 	"_adocb":    adocBook,
-	"ubb":       bash,
-	"ubp":       python,
-	"gomain":    goMain,
-	"flagsh":    flagsh,
+	"_audit":    audit,
+	"dbg":       dbg,
 	"dummyType": dummyType,
+	"flagsh":    flagsh,
+	"getURL":    getURL,
+	"gomain":    goMain,
+	"goMain":    goMain,
+	"html5":     html5,
 	"jm":        jsonMarshal,
 	"ju":        jsonUnmarshal,
+	"_lg":       lg,
+    "_lgr": logger,
+	"nnf":       nnf,
+	"nnl":       nnl,
+	"openFile":  openFile,
+	"pymain":    pyMain,
 	"rb":        readBody,
+	"readFile":  readFile,
+	"reqStdin":  reqStdin,
+	"serveHTTP": serveHTTP,
+	"tempFile":  tempFile,
+	"ubb":       bash,
+	"ubp":       python,
 	"watcher":   watcher,
+	"_wok":      weeksOfCoding,
 }
 
 var update = map[string]func(string){
@@ -180,6 +181,10 @@ func weeksOfCoding() {
 	fmt.Printf(`"Weeks of coding can save you hours of thinking."`)
 }
 
+func logger() {
+	fmt.Printf(`"github.com/ShawnMilo/logger"`)
+}
+
 func lg() {
 	fmt.Println(`lg := logger.FromContext(ctx)`)
 }
@@ -199,7 +204,7 @@ func nnl() {
 func dbg() {
 	weekday := string([]rune(time.Now().Weekday().String())[0])
 	day := time.Now().Day()
-	fmt.Printf(`log.Printf("%s%d %%v", x)\n`, weekday, day)
+	fmt.Printf(`lg.Debugf("%s%d %%v", x)`, weekday, day)
 }
 
 func lpf(line string) {
