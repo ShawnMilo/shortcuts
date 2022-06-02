@@ -30,7 +30,7 @@ var replace = map[string]func(){
 	"jm":        jsonMarshal,
 	"ju":        jsonUnmarshal,
 	"_lg":       lg,
-    "_lgr": logger,
+	"_lgr":      logger,
 	"nnf":       nnf,
 	"nnl":       nnl,
 	"openFile":  openFile,
@@ -182,7 +182,7 @@ func weeksOfCoding() {
 }
 
 func logger() {
-	fmt.Printf(`"github.com/ShawnMilo/logger"`)
+	fmt.Printf(`"github.com/ShawnMilo/logger"` + "\n")
 }
 
 func lg() {
@@ -204,7 +204,7 @@ func nnl() {
 func dbg() {
 	weekday := string([]rune(time.Now().Weekday().String())[0])
 	day := time.Now().Day()
-	fmt.Printf(`lg.Debugf("%s%d %%v", x)`, weekday, day)
+	fmt.Printf(`lg.Debugf("%s%d %%v", x)`+"\n", weekday, day)
 }
 
 func lpf(line string) {
