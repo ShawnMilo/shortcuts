@@ -33,6 +33,7 @@ var replace = map[string]func(){
 	"_lgr":      logger,
 	"nnf":       nnf,
 	"nnl":       nnl,
+	"===now":    addNow,
 	"openFile":  openFile,
 	"pymain":    pyMain,
 	"rb":        readBody,
@@ -496,8 +497,8 @@ defer t.Close()
 `)
 }
 
-func now(line string) {
-	fmt.Println(strings.Replace(line, ":now:", time.Now().Format("2006-01-02 15:04:05"), 1))
+func adocNow(line string) {
+	fmt.Println(strings.Replace(line, "===now", "=== "+time.Now().Format("2006-01-02 15:04:05"), 1))
 }
 
 func bash() {
