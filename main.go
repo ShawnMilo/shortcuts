@@ -54,6 +54,7 @@ var update = map[string]func(string){
 	":json:": formatJSON,
 	"lpf(":   lpf,
 	"lpl(":   lpl,
+	"==day":  adocDay,
 	"===now": adocNow,
 	"ow:":    pyOpenWrite,
 	":tb:":   markdownTable,
@@ -504,6 +505,10 @@ defer t.Close()
 
 func adocNow(line string) {
 	fmt.Println(strings.Replace(line, "===now", "=== "+time.Now().Format("2006-01-02 15:04:05"), 1))
+}
+
+func adocDay(line string) {
+	fmt.Println(strings.Replace(line, "==day", "== "+time.Now().Format("Monday, January 2, 2006"), 1))
 }
 
 func bash() {
