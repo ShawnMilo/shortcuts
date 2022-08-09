@@ -75,6 +75,11 @@ var modify = map[string]string{
 	":gc:":    "GroovyCar",
 	":siht:":  "So I have that going for me, which is nice.",
 	":now:":   func() string { return time.Now().Format("2006-01-02 15:04:05") }(),
+	":cr:": func() string {
+		now := time.Now().Format(time.RFC3339)
+		return fmt.Sprintf("---\ncreated: %s\nmodified: %s\n---\n\n# Title", now, now)
+	}(),
+	":mod:": func() string { return time.Now().Format(time.RFC3339) }(),
 }
 
 func getFileType(line string) string {
