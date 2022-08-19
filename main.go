@@ -20,18 +20,16 @@ var replace = map[string]func(){
 	"_adoca":    adocArticle,
 	"_adocb":    adocBook,
 	"_audit":    audit,
-	"dbg":       dbg,
-	"dummyType": dummyType,
+	"dg":        dg,
+	"dp":        dp,
 	"flagsh":    flagsh,
 	"getURL":    getURL,
 	"gomain":    goMain,
-	"goMain":    goMain,
 	"html5":     html5,
 	"bootstrap": bootstrap,
 	"jm":        jsonMarshal,
 	"ju":        jsonUnmarshal,
 	"_lg":       lg,
-	"_lgr":      logger,
 	"nnf":       nnf,
 	"nnl":       nnl,
 	"openFile":  openFile,
@@ -44,7 +42,6 @@ var replace = map[string]func(){
 	"ubb":       bash,
 	"ubp":       python,
 	"watcher":   watcher,
-	"_wok":      weeksOfCoding,
 }
 
 var update = map[string]func(string){
@@ -75,7 +72,7 @@ var modify = map[string]string{
 	":check:": "✅",
 	":x:":     "❌",
 	":cc:":    "☑",
-	":ds:":    func() string { return string(time.Now().Weekday().String()[0]) + time.Now().Format("02") }(),
+	":d:":     func() string { return string(time.Now().Weekday().String()[0]) + time.Now().Format("02") }(),
 	":ce:":    "☐",
 	":cx:":    "☒",
 	":boom:":  "💥",
@@ -192,14 +189,6 @@ func audit() {
 	fmt.Printf(`// Last audit %s by skm.`, time.Now().Format("2006-01-02"))
 }
 
-func weeksOfCoding() {
-	fmt.Printf(`"Weeks of coding can save you hours of thinking."`)
-}
-
-func logger() {
-	fmt.Printf(`"github.com/ShawnMilo/logger"` + "\n")
-}
-
 func lg() {
 	fmt.Println(`lg := logger.FromContext(ctx)`)
 }
@@ -216,10 +205,16 @@ func nnl() {
 	 }`)
 }
 
-func dbg() {
+func dg() {
 	weekday := string([]rune(time.Now().Weekday().String())[0])
-	day := time.Now().Day()
-	fmt.Printf(`lg.Debugf("%s%d %%v", x)`+"\n", weekday, day)
+	day := time.Now().Format("02")
+	fmt.Printf(`lg.Debugf("%s%s %%v", x)`+"\n", weekday, day)
+}
+
+func dp() {
+	weekday := string([]rune(time.Now().Weekday().String())[0])
+	day := time.Now().Format("02")
+	fmt.Printf(`print(f'%s%s: ')`+"\n", weekday, day)
 }
 
 func lpf(line string) {
@@ -312,8 +307,7 @@ func html5() {
         <link rel="stylesheet" href="https://aoeus.com/milligram.min.css" type="text/css">
 		 <meta name="viewport" content="width-device-width, initial-scale=1">
         <style type="text/css">
-            <body>
-            </body>
+            body{
                 margin: 40px auto;
                 max-width: 650px;
                 line-height: 1.6;
@@ -565,14 +559,6 @@ done
 `)
 }
 
-func dummyType() {
-	fmt.Println(`type dummy struct {
-    thing string
-    size int
-    color string
-}
-`)
-}
 func jsonMarshal() {
 	fmt.Println(`b, err := json.Marshal(x)
     if err != nil{
