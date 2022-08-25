@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/segmentio/ksuid"
 )
 
 // Don't overwrite *this* file while editing.
@@ -68,6 +70,7 @@ var modify = map[string]string{
 	":x:":     "❌",
 	":cc:":    "☑",
 	":d:":     func() string { return string(time.Now().Weekday().String()[0]) + time.Now().Format("02") }(),
+	":ksuid:": ksuid.New().String(),
 	":ce:":    "☐",
 	":cx:":    "☒",
 	":boom:":  "💥",
