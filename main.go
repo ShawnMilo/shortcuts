@@ -20,13 +20,12 @@ var replace = map[string]func(){
 	"_adoca":    adocArticle,
 	"_adocb":    adocBook,
 	"_audit":    audit,
-	"dg":        dg,
-	"dp":        dp,
+	"bootstrap": bootstrap,
+	"dbg":       dbg,
 	"flagsh":    flagsh,
 	"getURL":    getURL,
 	"gomain":    goMain,
 	"html5":     html5,
-	"bootstrap": bootstrap,
 	"jm":        jsonMarshal,
 	"ju":        jsonUnmarshal,
 	"_lg":       lg,
@@ -38,6 +37,7 @@ var replace = map[string]func(){
 	"readFile":  readFile,
 	"reqStdin":  reqStdin,
 	"serveHTTP": serveHTTP,
+	"src":       src,
 	"tempFile":  tempFile,
 	"ubb":       bash,
 	"ubp":       python,
@@ -203,6 +203,17 @@ func nnl() {
 	fmt.Println(`if err != nil{
 	 log.Printf("Failed to do something: %s\n", err)
 	 }`)
+}
+
+func dbg() {
+	if fileType == "go" {
+		dg()
+		return
+	}
+	if fileType == "py" {
+		dp()
+		return
+	}
 }
 
 func dg() {
@@ -535,6 +546,15 @@ func bash() {
 
 func python() {
 	fmt.Println("#!/usr/bin/env python")
+}
+
+func src() {
+	fmt.Println(`[source,go]
+----
+include::filename.go[]
+----
+
+`)
 }
 
 func flagsh() {
