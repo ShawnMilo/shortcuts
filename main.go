@@ -59,11 +59,6 @@ var update = map[string]func(string){
 	"ul":     ul,
 }
 
-/*
-	weekday := string([]rune(time.Now().Weekday().String())[0])
-	day := time.Now().Day()
-	fmt.Printf(`lg.Debugf("%s%d %%v", x)`+"\n", weekday, day)
-*/
 var modify = map[string]string{
 	"_ctx,":   "ctx context.Context,",
 	"_ctc":    "Cracking the Cryptic",
@@ -78,8 +73,6 @@ var modify = map[string]string{
 	":boom:":  "💥",
 	":cool:":  "🆒",
 	":ok:":    "🆗",
-	":gc:":    "GroovyCar",
-	":siht:":  "So I have that going for me, which is nice.",
 	":now:":   func() string { return time.Now().Format("2006-01-02 15:04:05") }(),
 	":cr:": func() string {
 		now := time.Now().Format(time.RFC3339)
@@ -122,6 +115,8 @@ func main() {
 	s := bufio.NewScanner(os.Stdin)
 	var lastBlank bool
 
+	// Do not overwrite files containing this flag.
+	// This is mostly to protect *this* file.
 	var exempt bool
 
 	var count int
@@ -131,6 +126,7 @@ func main() {
 			exempt = true
 		}
 
+		//  get file type
 		if count == 0 {
 			if len(os.Args) == 2 {
 				fileType = os.Args[1]
@@ -153,27 +149,30 @@ func main() {
 			continue
 		}
 
-		var replaced bool
+		var changed bool
 		for pre, f := range update {
 			if strings.HasPrefix(trim, pre) {
 				f(line)
-				replaced = true
+				changed = true
 				break
 			}
 
 		}
-
-		for pre, post := range modify {
-			if strings.Contains(line, pre) {
-				line = strings.Replace(line, pre, post, 5)
-			}
-		}
-
-		if replaced {
+		if changed {
 			continue
 		}
 
-		if strings.TrimSpace(line) == "" {
+		for pre, post := range modify {
+			if strings.Contains(line, pre) {
+				fmt.Println(strings.Replace(line, pre, post, 5))
+				changed = true
+			}
+		}
+		if changed {
+			continue
+		}
+
+		if trim == "" {
 			if lastBlank {
 				continue
 			}
