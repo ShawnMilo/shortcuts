@@ -47,18 +47,19 @@ var replace = map[string]func(){
 }
 
 var update = map[string]func(string){
-	":cb:":   markdownCheckboxes,
-	"fpf(":   fpf,
-	"fpl(":   fpl,
-	"hfunc":  hfunc,
-	":json:": formatJSON,
-	"lpf(":   lpf,
-	"lpl(":   lpl,
-	"==day":  adocDay,
-	"===now": adocNow,
-	"ow:":    pyOpenWrite,
-	":tb:":   markdownTable,
-	"ul":     ul,
+	":cb:":    markdownCheckboxes,
+	"fpf(":    fpf,
+	"fpl(":    fpl,
+	"hfunc":   hfunc,
+	":json:":  formatJSON,
+	"lpf(":    lpf,
+	"lpl(":    lpl,
+	"==day":   adocDay,
+	"===now":  adocNow,
+	"ow:":     pyOpenWrite,
+	":tb:":    markdownTable,
+	"ul":      ul,
+	":ksuid:": getKSUID,
 }
 
 var modify = map[string]string{
@@ -70,7 +71,6 @@ var modify = map[string]string{
 	":x:":     "❌",
 	":cc:":    "☑",
 	":d:":     func() string { return string(time.Now().Weekday().String()[0]) + time.Now().Format("02") }(),
-	":ksuid:": ksuid.New().String(),
 	":ce:":    "☐",
 	":cx:":    "☒",
 	":boom:":  "💥",
@@ -154,7 +154,7 @@ func main() {
 
 		var changed bool
 		for pre, f := range update {
-			if strings.HasPrefix(trim, pre) {
+			if strings.Contains(trim, pre) {
 				f(line)
 				changed = true
 				break
@@ -349,7 +349,7 @@ func adocArticle() {
 	date := time.Now().Format("2006-01-02")
 	fmt.Printf(`= Article Title
 %s <%s>
-v0.1, %s
+v0.1.0, %s
 :doctype: article
 :source-highlighter: pygments
 :toc:
@@ -601,6 +601,10 @@ func readBody() {
 		 return err
 	 }
 	 defer r.Body.Close()`)
+}
+
+func getKSUID(l string) {
+	fmt.Println(strings.Replace(l, ":ksuid:", ksuid.New().String(), 1))
 }
 
 func watcher() {
