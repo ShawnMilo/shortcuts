@@ -56,7 +56,7 @@ var update = map[string]func(string){
 	"lpl(":    lpl,
 	"==day":   adocDay,
 	"===now":  adocNow,
-	"ow:":     pyOpenWrite,
+	":ow:":    pyOpenWrite,
 	":tb:":    markdownTable,
 	"ul":      ul,
 	":ksuid:": getKSUID,
@@ -145,9 +145,15 @@ func main() {
 			continue
 		}
 
+		var indentation string
+		indent := len(line) - len(strings.TrimLeft(line, " \t"))
+		if indent > 0 {
+			indentation = line[:indent]
+		}
 		trim := strings.TrimSpace(line)
-
 		if f, found := replace[trim]; found {
+			// don't lose indentation
+			fmt.Printf(indentation)
 			f()
 			continue
 		}
@@ -183,7 +189,7 @@ func main() {
 		} else {
 			lastBlank = false
 		}
-		fmt.Println(line)
+		fmt.Println(indentation + trim)
 	}
 }
 
