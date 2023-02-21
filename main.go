@@ -186,6 +186,9 @@ func main() {
 				continue
 			}
 			lastBlank = true
+			// Don't re-add indentation if the line is blank.
+			fmt.Println(trim)
+			continue
 		} else {
 			lastBlank = false
 		}
