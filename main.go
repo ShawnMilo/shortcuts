@@ -44,6 +44,7 @@ var replace = map[string]func(){
 	"ubb":       bash,
 	"ubp":       python,
 	"watcher":   watcher,
+	"inotify":   inotify,
 }
 
 var update = map[string]func(string){
@@ -230,13 +231,13 @@ func dbg() {
 func dg() {
 	weekday := string([]rune(time.Now().Weekday().String())[0])
 	day := time.Now().Format("02")
-	fmt.Printf(`lg.Debugf("%s%s %%v", x)`+"\n", weekday, day)
+	fmt.Printf(`lg.Debugf("#%s%s %%v", x)`+"\n", weekday, day)
 }
 
 func dp() {
 	weekday := string([]rune(time.Now().Weekday().String())[0])
 	day := time.Now().Format("02")
-	fmt.Printf(`print(f'%s%s: ')`+"\n", weekday, day)
+	fmt.Printf(`print(f'#%s%s: ')`+"\n", weekday, day)
 }
 
 func lpf(line string) {
@@ -614,6 +615,19 @@ func readBody() {
 
 func getKSUID(l string) {
 	fmt.Println(strings.Replace(l, ":ksuid:", ksuid.New().String(), 1))
+}
+
+func inotify() {
+	fmt.Println(`#!/usr/bin/env bash
+
+while true
+do
+    export filename=$(inotifywait -t 3600 -r -e close_write --format %w%f --include '\.py$' .)
+    if [ "$filename" == '' ]; then
+        break
+    fi
+    ./$filename
+done`)
 }
 
 func watcher() {
