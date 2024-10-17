@@ -17,14 +17,13 @@ var exemptKey = "1jT18gRquHb4UJXk6XG169YZJ10"
 var fileType string
 
 var replace = map[string]func(){
-	"_adoca":    adocArticle,
-	"_adocb":    adocBook,
-	"dbg":       dbg,
-	"flagsh":    flagsh,
-	"html5":     html5,
-	"ubb":       bash,
-	"ubp":       python,
-	"inotify":   inotify,
+	"_adoca":  adocArticle,
+	"_adocb":  adocBook,
+	"dbg":     dbg,
+	"html5":   html5,
+	"ubb":     bash,
+	"ubp":     python,
+	"inotify": inotify,
 }
 
 var update = map[string]func(string){
@@ -256,43 +255,20 @@ func python() {
 	fmt.Println("#!/usr/bin/env python")
 }
 
-func flagsh() {
-
-	fmt.Println(`#!/usr/bin/env bash
-
-flag=$(mktemp)
-touch $flag
-
-while true; do
-sleep 5
-    find . -mmin -1 -name '*.go' 2>>/dev/null | while read file; do
-        if [[ "$file" -nt $flag ]]; then
-            if [[ "$file" == "$flag" ]]; then
-                continue
-            fi
-            echo "$file was updated"
-            touch $flag
-        fi
-    done
-done
-`)
-}
-
 func getKSUID(l string) {
 	fmt.Println(strings.Replace(l, ":ksuid:", ksuid.New().String(), 1))
 }
 
 func inotify() {
-	fmt.Println(`#!/usr/bin/env bash
+	fmt.Println(`#!/usr/bin/env fish
 
 while true
-do
-    export filename=$(inotifywait -t 3600 -r -e close_write --format %w%f --include '\.py$' .)
-    if [ "$filename" == '' ]; then
-        break
-    fi
-    ./$filename
-done`)
+    set -x filename (inotifywait -t 3600 -r -e close_write --format %w%f --include '\.adoc$' .)
+    if test -z $filename
+        continue
+    end
+    asciidoctor-pdf $filename
+end`)
 }
 
 func fromGitConfig(value string) string {
