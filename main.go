@@ -265,7 +265,7 @@ func inotify() {
 while true
     set -x filename (inotifywait -t 3600 -r -e close_write --format %w%f --include '\.adoc$' .)
     if test -z $filename
-        continue
+        break
     end
     asciidoctor-pdf $filename
 end`)
